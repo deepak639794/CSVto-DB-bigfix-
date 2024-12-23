@@ -1,0 +1,43 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 03July2003@@
+      POSTGRES_DB: CSV_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: deepakadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: deepakgoyanka91@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+
+  app:
+    build:
+      context: .
+    container_name: golang-app
+    depends_on:
+      - postgres
+    command: ["go", "run", "/app/main.go"]
+    volumes:
+      - C:/Users/deepak.ag/Desktop/GoProjects/projects/docker_csv:/app
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: deepakAgrawl
+      DB_PASSWORD: dee@123
+      DB_NAME: CSV_db
+
+volumes:
+  postgres-data:
